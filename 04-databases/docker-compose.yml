@@ -1,0 +1,18 @@
+services:
+  postgres-core:
+    image: postgres:16-alpine
+    container_name: postgres-core
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+      # You can add a startup script here to auto-create the Authentik DB
+      - ./init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql:ro
+    networks:
+      - db_net
+
+networks:
+  db_net:
+    external: true
